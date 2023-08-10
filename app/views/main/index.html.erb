@@ -1,0 +1,127 @@
+
+
+  <div id="giris">
+        <h2 class="girisyazisi" id="girisyazisi">by Mehmet Koç</h2>
+        <button class="butt" id="butt">Take the quiz</button>
+  </div>
+
+
+
+<div class="quiz-container inactive">
+        <form id="quiz-form">
+
+
+     
+            <h3 id="question"><%= @questions[0].question %></h3>
+      
+
+
+            <div class="answers">
+                <div>
+                    <input type="radio" id="answer1" name="answer" value=<%= @questions[0].answers[0] %> >
+                    <label id="label1" for="answer1"name="ansi"> <%= @questions[0].answers[0] %>  </label>
+                </div>
+                
+                <div>
+                    <input type="radio" id="answer2" name="answer" value=<%= @questions[0].answers[1] %> >
+                    <label id="label2" for="answer2"name="ansi"><%= @questions[0].answers[1] %> </label>
+                </div>
+                <div>
+                    <input type="radio" id="answer3" name="answer" value=<%= @questions[0].answers[2] %> >
+                    <label id="label3" for="answer3"name="ansi"><%= @questions[0].answers[2] %> </label>
+                </div>
+                <div>
+                    <input type="radio" id="answer4" name="answer" value=<%= @questions[0].answers[3] %> >
+                    <label id="label4" for="answer4"name="ansi"><%= @questions[0].answers[3] %> </label>
+                </div>
+            </div>
+        
+
+            <button type="button" onclick="Next()" class="butt">Next</button>
+        </form>
+
+    
+        <div class="correct-answer inactive">
+            <p></p>
+        </div>
+
+        
+
+
+
+
+<script>
+  var questionsData = <%= @questions.to_json.html_safe %>;
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    var button = document.getElementById("butt");
+    button.addEventListener("click", function() {
+
+      var quizContainer = document.querySelector(".quiz-container");
+      quizContainer.classList.remove("inactive");
+  
+      var girisyazisi= document.getElementById("girisyazisi");
+      girisyazisi.style.display="none";
+      button.style.display="none";
+
+    });
+  });
+  
+  var Index = 0;
+
+     function Load(Index) {
+    var question = questionsData[Index].question;
+    var answer1=   questionsData[Index].answers[0];
+    var answer2=   questionsData[Index].answers[1];
+    var answer3=   questionsData[Index].answers[2];
+    var answer4=   questionsData[Index].answers[3];
+    document.getElementById("question").innerHTML = question;
+    document.getElementById("label1").innerHTML=answer1;
+    document.getElementById("label2").innerHTML=answer2;
+    document.getElementById("label3").innerHTML=answer3;
+    document.getElementById("label4").innerHTML=answer4;
+    document.getElementById("answer1").value = answer1;
+  document.getElementById("answer2").value = answer2;
+  document.getElementById("answer3").value = answer3;
+  document.getElementById("answer4").value = answer4;
+
+  
+  }
+
+ function Next() {
+    CheckAnswer();
+    Index++;
+    if (Index < questionsData.length) {
+        Load(Index);
+    } else {
+        FinishMessage();
+    }
+}
+
+
+var correctAnswerNumber = 0;
+
+function CheckAnswer() {
+    var selectedAnswer = document.querySelector('input[name="answer"]:checked');
+    var correctAnswer = questionsData[Index].answer;
+
+    if (selectedAnswer.value === correctAnswer) {
+        correctAnswerNumber++;
+    }
+
+
+}
+
+  function FinishMessage(){
+    
+        var correctanswer = document.querySelector(".correct-answer");
+        correctanswer.innerHTML = "<p>You scored " + correctAnswerNumber + "/" + "5" + "<p>";
+        correctanswer.classList.remove("inactive");
+
+  }
+
+
+</script>
+
+
